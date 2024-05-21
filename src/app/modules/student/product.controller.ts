@@ -8,13 +8,13 @@ const createProductIntoDB = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: "Product is created successfully",
+      message: "Product created successfully",
       data: result,
     });
   } catch (error: any) {
     res.status(500).json({
       success: true,
-      message: error.message || "Product is created successfully",
+      message: error.message || "Something went wrong",
       data: error,
     });
   }
@@ -32,7 +32,26 @@ const getAllProductsFromDB = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({
       success: true,
-      message: error.message || "Product is created successfully",
+      message: error.message || "Something went wrong",
+      data: error,
+    });
+  }
+};
+const getSingleProductFromDB = async (req: Request, res: Response) => {
+    try {
+      
+    const {_id} = req.body;
+    const result = await productServices.getSingleProduct(_id);
+
+    res.status(200).json({
+      success: true,
+      message: "Product fetched successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: true,
+      message: error.message || "Something went wrong",
       data: error,
     });
   }
@@ -46,13 +65,33 @@ const updateProductsIntoDB = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: "Products fetched successfully",
+      message: "Product updated successfully",
       data: result,
     });
   } catch (error: any) {
     res.status(500).json({
       success: true,
-      message: error.message || "Product is created successfully",
+      message: error.message || "Something went wrong",
+      data: error,
+    });
+  }
+};
+
+
+const deleteProductsFromDB = async (req: Request, res: Response) => {
+    try {
+        const product = await req.body;
+    const result = await productServices.deleteSingleProduct(product._id);
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: true,
+      message: error.message || "Something went wrong",
       data: error,
     });
   }
@@ -63,5 +102,9 @@ const updateProductsIntoDB = async (req: Request, res: Response) => {
 
 export const studentControllers = {
     createProductIntoDB,
-    getAllProductsFromDB
+    getAllProductsFromDB,
+    updateProductsIntoDB,
+    deleteProductsFromDB,
+    getSingleProductFromDB
+
 };
