@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 import { TProduct } from "./product.interface";
 
 
@@ -18,3 +18,5 @@ export const productSchema = new Schema<TProduct>({
     }
     
 })
+
+export const Product = model("Product",productSchema)
