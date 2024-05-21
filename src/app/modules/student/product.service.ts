@@ -7,10 +7,12 @@ const createProduct = async (productData :TProduct) => {
     const result = await Product.create(productData);
     return result;
 }
+
 const getAllProducts = async () => {
     const result = await Product.find({});
     return result;
 }
+
 const getSingleProduct = async (id:string) => {
     const result = await Product.findOne({id});
     return result;
@@ -21,8 +23,17 @@ const updateSingleProduct = async (product :TProduct) => {
     return result;;
 };
 
+const deleteSingleProduct = async (product :TProduct) => {
+    const result = await Product.deleteOne({ id: product._id });
+    return result;;
+};
 
 
-const productServices = {
+
+export const productServices = {
     createProduct,
+    getAllProducts,
+    getSingleProduct,
+    updateSingleProduct,
+    deleteSingleProduct,
 }
