@@ -19,7 +19,7 @@ const getSingleProduct = async (id:string) => {
 }
 
 const updateSingleProduct = async (product :TProduct) => {
-    const result = await Product.updateOne({ id: product._id }, product);
+    const result = await Product.updateOne({ id: product._id,product });
     return result;;
 };
 
