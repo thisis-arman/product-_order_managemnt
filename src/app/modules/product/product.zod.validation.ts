@@ -6,12 +6,12 @@ const variantSchema = z.object({
 });
 
 
-const productValidationSchema = z.object({
+export const productValidationSchema = z.object({
     name: z.string(),
     description: z.string(),
     price: z.number(),
     category: z.string(),
-    tags: z.string(),
+    tags: z.array(z.string()),
     variant: z.array(
        variantSchema  
     ),

@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import { productServices } from "./product.service";
 
-const createProductIntoDB = async (req: Request, res: Response) => {
+
+const createProduct = async (req: Request, res: Response) => {
   try {
-    const student = await req.body;
-    const result = await productServices.createProduct(student);
+
+    const {product} = req.body;
+    console.log({ product });
+    const result = await productServices.createProduct(product);
 
     res.status(200).json({
       success: true,
@@ -13,14 +16,14 @@ const createProductIntoDB = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: error.message || "Something went wrong",
-      data: error,
+      data: error.details,
     });
   }
 };
 
-const getAllProductsFromDB = async (req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
   try {
     const result = await productServices.getAllProducts();
 
@@ -37,11 +40,11 @@ const getAllProductsFromDB = async (req: Request, res: Response) => {
     });
   }
 };
-const getSingleProductFromDB = async (req: Request, res: Response) => {
+const getSingleProduct = async (req: Request, res: Response) => {
     try {
       
-    const {_id} = req.body;
-    const result = await productServices.getSingleProduct(_id);
+      const {productId} = req.params;
+    const result = await productServices.getSingleProduct(productId);
 
     res.status(200).json({
       success: true,
@@ -100,11 +103,11 @@ const deleteProductsFromDB = async (req: Request, res: Response) => {
 
 
 
-export const studentControllers = {
-    createProductIntoDB,
-    getAllProductsFromDB,
+export const productControllers = {
+    createProduct,
+    getAllProducts ,
     updateProductsIntoDB,
     deleteProductsFromDB,
-    getSingleProductFromDB
+    getSingleProduct
 
 };
