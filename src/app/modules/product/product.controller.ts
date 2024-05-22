@@ -28,6 +28,7 @@ const getAllProducts = async (req: Request, res: Response) => {
   try {
 
     const query = req.query;
+   
     const result = await productServices.getAllProducts(query);
 
     res.status(200).json({
@@ -137,6 +138,5 @@ export const productControllers = {
     updateProductsIntoDB,
     deleteProductsFromDB,
   getSingleProduct,
-    productByTextSearch
 
 };

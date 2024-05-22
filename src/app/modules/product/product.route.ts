@@ -11,7 +11,7 @@ router.get("/products/", productControllers.getAllProducts);
 router.get("/products/:productId", productControllers.getSingleProduct);
 router.put("/products/:productId", productControllers.updateProductsIntoDB);
 router.delete("/products/:productId", productControllers.deleteProductsFromDB);
-router.get("/products", productControllers.productByTextSearch);
+// router.get("/products", productControllers.productByTextSearch);
 
 
 // /api/products?searchTerm=iphone
