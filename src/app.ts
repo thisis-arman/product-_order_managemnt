@@ -13,7 +13,7 @@ app.use('/api', productRoutes);
 app.use('/api/orders', orderRoute);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Simple E commerce system - Assignment 2!");
 });
 
 export default app;
