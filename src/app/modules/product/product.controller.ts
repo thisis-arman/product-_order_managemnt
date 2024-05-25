@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { productServices } from "./product.service";
 import { Product } from "./product.model";
-
+import { productValidationSchema } from "./product.zod.validation";
 
 const createProduct = async (req: Request, res: Response) => {
   try {
-
-    const {product} = req.body;
+    const { product } = req.body;
+    const parsedProduct = await productValidationSchema.parse(product);
     console.log({ product });
-    const result = await productServices.createProduct(product);
+    const result = await productServices.createProduct(parsedProduct);
 
     res.status(200).json({
       success: true,
@@ -26,30 +26,34 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-
     const query = req.query;
-   
-    const result = await productServices.getAllProducts(query);
 
-    res.status(200).json({
-      success: true,
-      message: "Products fetched successfully",
-      data: result,
-    });
+    const result = await productServices.getAllProducts(query);
+    if (req.query.searchTerm) {
+      res.status(200).json({
+        success: true,
+        message: `Products matching search term '${req.query.searchTerm}' fetched successfully!`,
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Products fetched successfully",
+        data: result,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: error.message || "Something went wrong",
       data: error,
     });
   }
 };
 
-
 const getSingleProduct = async (req: Request, res: Response) => {
-    try {
-      
-      const {productId} = req.params;
+  try {
+    const { productId } = req.params;
     const result = await productServices.getSingleProduct(productId);
 
     res.status(200).json({
@@ -59,17 +63,16 @@ const getSingleProduct = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: error.message || "Something went wrong",
       data: error,
     });
   }
 };
 
-
 const updateProductsIntoDB = async (req: Request, res: Response) => {
-    try {
-        const product = await req.body;
+  try {
+    const product = await req.body;
     const result = await productServices.updateSingleProduct(product);
 
     res.status(200).json({
@@ -79,17 +82,16 @@ const updateProductsIntoDB = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: error.message || "Something went wrong",
       data: error,
     });
   }
 };
 
-
 const deleteProductsFromDB = async (req: Request, res: Response) => {
-    try {
-        const {productId} = await req.params;
+  try {
+    const { productId } = await req.params;
     const result = await productServices.deleteSingleProduct(productId);
 
     res.status(200).json({
@@ -99,44 +101,17 @@ const deleteProductsFromDB = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: error.message || "Something went wrong",
       data: error,
     });
   }
 };
 
-
-
-// TODO : SEARCH BY TEXT
-/* const productByTextSearch = async (req: Request, res: Response) => {
-
- try {
-   const { searchTerm } = req.query;
-   console.log(req.query);
-   const query = searchTerm ? { name: new RegExp(searchTerm, "i") } : {};
-   const products = await Product.find(query);
-   res.status(200).json({
-     success: true,
-     data: products,
-   });
-  } catch (error :any) {
-   res.status(500).json({
-     success: false,
-     message: error.message || "Something went wrong",
-     data: error.details,
-   });
- }
-
-} */
-
-
-
 export const productControllers = {
-    createProduct,
-    getAllProducts ,
-    updateProductsIntoDB,
-    deleteProductsFromDB,
+  createProduct,
+  getAllProducts,
+  updateProductsIntoDB,
+  deleteProductsFromDB,
   getSingleProduct,
-
 };

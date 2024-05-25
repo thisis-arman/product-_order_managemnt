@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 import { TOrder } from "./order.interface";
 
 export const orderSchema = new Schema<TOrder>({

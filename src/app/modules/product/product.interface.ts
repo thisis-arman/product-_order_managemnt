@@ -3,11 +3,11 @@ export type TProduct = {
   description: string;
   price: number;
   category: string;
-  tags: Array<string>;
-  variants: Array<{
+  tags: string[];
+  variants: {
     type: string;
     value: string;
-  }>;
+  }[];
   inventory: {
     quantity: number;
     inStock: boolean;

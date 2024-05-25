@@ -6,10 +6,19 @@ const createProductIntoDB = async (productData: TProduct) => {
   return await product.save();
 };
 
-const getAllProducts = async (query: object) => {
-  const {searchTerm} = query;
-  const result = await Product.find({ $text: { $search: searchTerm } });
-  return result;
+const getAllProducts = async (query: { searchTerm?: string }) => {
+  const { searchTerm } = query;
+
+  // If searchTerm is provided and is a non-empty string, perform a text search
+  if (
+    searchTerm &&
+    typeof searchTerm === "string" &&
+    searchTerm.trim() !== ""
+  ) {
+    return await Product.find({ $text: { $search: searchTerm } });
+  }
+
+  return await Product.find({});
 };
 
 const getSingleProduct = async (_id: string) => {

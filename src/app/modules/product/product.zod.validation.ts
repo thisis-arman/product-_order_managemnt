@@ -12,7 +12,7 @@ export const productValidationSchema = z.object({
     price: z.number(),
     category: z.string(),
     tags: z.array(z.string()),
-    variant: z.array(
+    variants: z.array(
        variantSchema  
     ),
     inventory: z.object({

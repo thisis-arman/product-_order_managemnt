@@ -1,28 +1,32 @@
 import { Request, Response } from "express";
 import { orderServices } from "./order.service";
+import { orderValidationSchema } from "./order.zod.validation";
 
 const createOrder = async (req: Request, res: Response) => {
   try {
     const orderInfo = req.body;
-    const result = await orderServices.createOrderIntoDB(orderInfo);
+
+    const parsedOrder = await orderValidationSchema.parse(orderInfo)
+    const result = await orderServices.createOrderIntoDB(parsedOrder);
     res.status(200).send({
       success: true,
       message: "Order created successfully",
       data: result,
     });
-  } catch (error) {
+  } catch (error :any) {
     res.status(200).send({
       success: true,
-      message: "Something went wrong",
+      message:error.message|| "Something went wrong",
       data: error,
     });
   }
 };
+
+
 const getAllOrders = async (req: Request, res: Response) => {
   try {
 
-      const query = req.query;
-    //   console.log({query});
+    
     const result = await orderServices.getAllOrdersFromDB(req.query);
     res.status(200).send({
       success: true,
@@ -39,8 +43,29 @@ const getAllOrders = async (req: Request, res: Response) => {
 };
 
 
+const getASingleOrder = async (req: Request, res: Response) => {
+  try {
+
+    const { orderId } = req.params;
+    const result = await orderServices.getASingleOrderFromDB(orderId);
+    res.status(200).send({
+      success: true,
+      message: "Orders fetched successfully",
+      data: result,
+    });
+  } catch (error:any) {
+    res.status(200).send({
+      success: false,
+      message:error.path?"Order not found " :"Something went wrong",
+     
+    });
+  }
+};
+
+
 export const orderControllers = {
     createOrder,
-    getAllOrders
+  getAllOrders,
+    getASingleOrder
 
 }
