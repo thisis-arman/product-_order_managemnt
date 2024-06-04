@@ -6,6 +6,7 @@ const createProductIntoDB = async (productData: TProduct) => {
   return await product.save();
 };
 
+
 const getAllProducts = async (query: { searchTerm?: string }) => {
   const { searchTerm } = query;
 
@@ -31,17 +32,26 @@ const getSingleProduct = async (_id: string) => {
 
 
 
-const updateSingleProduct = async (product: TProduct) => {
+const updateSingleProduct = async (product:any) => {
   const result = await Product.updateOne(
     { id: product._id },
     { $set: product }
   );
-  return result;
+  if (result.acknowledged === true && result.modifiedCount===1) { 
+
+    return product;
+  }
+  throw new Error("Product update failed")
+
 };
 
 const deleteSingleProduct = async (_id:string) => {
   const result = await Product.deleteOne({ _id });
-  return result;
+
+  if (result.acknowledged === true && result.deletedCount=== 1) {
+    
+    return null;
+  }
 };
 
 
